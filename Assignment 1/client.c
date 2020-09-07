@@ -5,7 +5,7 @@
 #include <netdb.h>
 
 #define h_addr h_addr_list[0] /* for backward compatibility */
-#define SERVER_PORT 5432
+#define SERVER_PORT 54321
 #define MAX_LINE 256
 
 int main(int argc, char *argv[]) {
