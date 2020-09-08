@@ -1,2 +1,5 @@
 #!/bin/zsh
-./client.out "10.0.0.8:5432"
+IP=10.0.0.8
+PORT=54321
+
+./client.out "$IP:PORT"
