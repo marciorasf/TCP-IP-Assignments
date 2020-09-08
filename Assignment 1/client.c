@@ -4,6 +4,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include <stdlib.h> // function exit is declared on this lib
+#include <unistd.h> // function close is declared on this lib
+#include <string.h> // function strlen is declared on this lib
+
 #define h_addr h_addr_list[0] /* for backward compatibility */
 #define SERVER_PORT 54321
 #define MAX_LINE 256

@@ -1,17 +1,20 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-
 #include <netinet/in.h>
 #include <netdb.h>
+
+#include <stdlib.h> // function exit is declared on this lib
+#include <unistd.h> // function close is declared on this lib
+#include <string.h> // function strlen is declared on this lib
+
 #define SERVER_PORT 5432
 #define MAX_PENDING 5
 #define MAX_LINE 256
-int main()
-{
+
+int main() {
     struct sockaddr_in sin;
     char buf[MAX_LINE];
-    int len;
     int s, new_s;
 
     /* build address data structure */
@@ -31,7 +34,8 @@ int main()
     }
     listen(s, MAX_PENDING);
 
-    len = sizeof(sin);
+    unsigned int len =  sizeof(sin);
+
     /* wait for connection, then receive and print text */
     while (1)
     {
@@ -39,9 +43,10 @@ int main()
             perror("simplex-talk: accept");
             exit(1);
         }
-        while (len = recv(new_s, buf, sizeof(buf), 0))
-
+        while (len = (unsigned int) recv(new_s, buf, sizeof(buf), 0)) {
             fputs(buf, stdout);
+        }
+        
         close(new_s);
     }
 }
