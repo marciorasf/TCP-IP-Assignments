@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     sin.sin_port = htons(SERVER_PORT);
 
     /* active open */
-    if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((s = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("simplex-talk: socket");
         exit(1);
     }
@@ -54,10 +54,5 @@ int main(int argc, char *argv[]) {
         buf[MAX_LINE - 1] = '\0';
         len = strlen(buf) + 1;
         send(s, buf, len, 0);
-
-        // Wait for the server to send the message back and print it
-        char recvBuf[MAX_LINE];
-        recv(s, recvBuf, sizeof(recvBuf), 0);
-        fputs(recvBuf, stdout);
     }
 }
