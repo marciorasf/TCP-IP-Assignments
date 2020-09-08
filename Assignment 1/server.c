@@ -28,21 +28,23 @@ int main() {
         perror("simplex-talk: socket");
         exit(1);
     }
+    
     if ((bind(s, (struct sockaddr *)&sin, sizeof(sin))) < 0) {
         perror("simplex-talk: bind");
         exit(1);
     }
+
     listen(s, MAX_PENDING);
 
     unsigned int len =  sizeof(sin);
 
     /* wait for connection, then receive and print text */
-    while (1)
-    {
+    while (1) {
         if ((new_s = accept(s, (struct sockaddr *)&sin, &len)) < 0) {
             perror("simplex-talk: accept");
             exit(1);
         }
+
         while ((len = (unsigned int) recv(new_s, buf, sizeof(buf), 0))) {
             fputs(buf, stdout);
         }
