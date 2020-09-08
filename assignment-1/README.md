@@ -1,5 +1,9 @@
 # Trabalho 1
 
+## Importante!
+
+Alguns scripts utilizam o ZShell e o Konsole (KDE). Caso sejam necessárias versões utilizando bash e terminal, é só fazer uma cópia e alterar o necessário.
+
 ## Experimentos
 
 Os experimentos sâo baseados nos exercícios do capítulo 1 do livro Peterson, Davie: Computer Networks: A Systems Aproach, 5th Edition. 
