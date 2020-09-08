@@ -9,7 +9,6 @@
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
 
-#define h_addr h_addr_list[0] /* for backward compatibility */
 #define SERVER_PORT 54321
 #define MAX_LINE 256
 
@@ -28,16 +27,16 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    /* translate host name into peer's IP address */
-    inet_aton(host, &sin.sin_addr);
-
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
     
     sin.sin_family = AF_INET;
     
     sin.sin_port = htons(SERVER_PORT);
-    
+
+    /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
+    inet_aton(host, &sin.sin_addr);
+
     /* active open */
     if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
         perror("simplex-talk: socket");
