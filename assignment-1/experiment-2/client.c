@@ -14,10 +14,10 @@
 
 int main(int argc, char *argv[]) {
     struct sockaddr_in sin;
+    char *host;
     char buf[MAX_LINE];
     int s;
     int len;
-    char *host;
 
     if (argc == 2) {
         host = argv[1];
@@ -27,15 +27,15 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
+    inet_aton(host, &sin.sin_addr);
+
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
     
     sin.sin_family = AF_INET;
     
     sin.sin_port = htons(SERVER_PORT);
-
-    /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
-    inet_aton(host, &sin.sin_addr);
 
     /* active open */
     if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {

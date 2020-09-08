@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+
 #include <netinet/in.h>
 #include <netdb.h>
-
 #include <stdlib.h> // function exit is declared on this lib
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
@@ -15,6 +15,7 @@
 int main() {
     struct sockaddr_in sin;
     char buf[MAX_LINE];
+    unsigned int len;
     int s, new_s;
 
     /* build address data structure */
@@ -28,15 +29,11 @@ int main() {
         perror("simplex-talk: socket");
         exit(1);
     }
-
     if ((bind(s, (struct sockaddr *)&sin, sizeof(sin))) < 0) {
         perror("simplex-talk: bind");
         exit(1);
     }
-
     listen(s, MAX_PENDING);
-
-    unsigned int len =  sizeof(sin);
 
     /* wait for connection, then receive and print text */
     while (1) {
@@ -45,10 +42,9 @@ int main() {
             exit(1);
         }
 
-        while ((len = (unsigned int) recv(new_s, buf, sizeof(buf), 0))) {
+        while ((len = recv(new_s, buf, sizeof(buf), 0))) {
             fputs(buf, stdout);
         }
-        
         close(new_s);
     }
 }
