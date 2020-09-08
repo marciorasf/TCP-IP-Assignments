@@ -18,9 +18,18 @@ int main(int argc, char *argv[]) {
     char buf[MAX_LINE];
     int s;
     int len;
+    char *host;
+
+    if (argc == 2) {
+        host = argv[1];
+    }
+    else {
+        fprintf(stderr, "usage: simplex-talk host\n");
+        exit(1);
+    }
 
     /* translate host name into peer's IP address */
-    inet_aton("10.0.0.8:54321", &sin.sin_addr);
+    inet_aton(host, &sin.sin_addr);
 
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
