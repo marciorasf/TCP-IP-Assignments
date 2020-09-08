@@ -13,7 +13,6 @@
 #define MAX_LINE 256
 
 int main(int argc, char *argv[]) {
-    FILE *fp;
     struct hostent *hp;
     struct sockaddr_in sin;
     char *host;

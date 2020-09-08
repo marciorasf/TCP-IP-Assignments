@@ -43,7 +43,7 @@ int main() {
             perror("simplex-talk: accept");
             exit(1);
         }
-        while (len = (unsigned int) recv(new_s, buf, sizeof(buf), 0)) {
+        while ((len = (unsigned int) recv(new_s, buf, sizeof(buf), 0))) {
             fputs(buf, stdout);
         }
         
