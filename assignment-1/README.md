@@ -2,15 +2,15 @@
 
 ## Experimentos
 
-Os experimentos serão baseados nos exercícios do capítulo 1 do livro Peterson, Davie: Computer Networks: A Systems Aproach, 5th Edition. 
+Os experimentos sâo baseados nos exercícios do capítulo 1 do livro Peterson, Davie: Computer Networks: A Systems Aproach, 5th Edition. 
 
     1. (Setup) Implementar código de servidor e cliente descrito na seção 1.4 do livro.
 
-    2. Fazer exercício 32.
+    2. Experimento 1: Fazer exercício 32.
 
-    3. Fazer exercício 33.
+    3. Experimento 2: Fazer exercício 33.
 
-    4. Fazer exercício 34.
+    4. Experimento 3: Fazer exercício 34.
 
 ## Organização das pastas
 
