@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
 #include <stdlib.h> // function exit is declared on this lib
 #include <unistd.h> // function close is declared on this lib
@@ -13,34 +14,19 @@
 #define MAX_LINE 256
 
 int main(int argc, char *argv[]) {
-    struct hostent *hp;
     struct sockaddr_in sin;
-    char *host;
     char buf[MAX_LINE];
     int s;
     int len;
 
-    if (argc == 2) {
-        host = argv[1];
-    }
-    else {
-        fprintf(stderr, "usage: simplex-talk host\n");
-        exit(1);
-    }
-
     /* translate host name into peer's IP address */
-    hp = gethostbyname(host);
-    if (!hp) {
-        fprintf(stderr, "simplex-talk: unknown host: %s\n", host);
-        exit(1);
-    }
+    inet_aton("10.0.0.8:54321", &sin.sin_addr);
 
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
     
     sin.sin_family = AF_INET;
     
-    bcopy(hp->h_addr, (char *)&sin.sin_addr, hp->h_length);
     sin.sin_port = htons(SERVER_PORT);
     
     /* active open */
