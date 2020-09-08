@@ -8,7 +8,7 @@
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
 
-#define SERVER_PORT 5432
+#define SERVER_PORT 54321
 #define MAX_PENDING 5
 #define MAX_LINE 256
 
@@ -28,7 +28,7 @@ int main() {
         perror("simplex-talk: socket");
         exit(1);
     }
-    
+
     if ((bind(s, (struct sockaddr *)&sin, sizeof(sin))) < 0) {
         perror("simplex-talk: bind");
         exit(1);
