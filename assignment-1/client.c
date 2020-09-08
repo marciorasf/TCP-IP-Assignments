@@ -54,5 +54,10 @@ int main(int argc, char *argv[]) {
         buf[MAX_LINE - 1] = '\0';
         len = strlen(buf) + 1;
         send(s, buf, len, 0);
+
+        // Wait for the server to send the message back and print it
+        char recvBuf[MAX_LINE];
+        recv(s, recvBuf, sizeof(recvBuf), 0);
+        fputs(recvBuf, stdout);
     }
 }

@@ -47,6 +47,9 @@ int main() {
 
         while ((len = (unsigned int) recv(new_s, buf, sizeof(buf), 0))) {
             fputs(buf, stdout);
+            
+            // Resend to client the message
+            send(new_s, buf, len, 0);
         }
         
         close(new_s);
