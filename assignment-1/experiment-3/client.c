@@ -27,13 +27,14 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
-    inet_aton(host, &sin.sin_addr);
 
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
     
     sin.sin_family = AF_INET;
+    
+    /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
+    inet_aton(host, &sin.sin_addr);
     
     sin.sin_port = htons(SERVER_PORT);
 
