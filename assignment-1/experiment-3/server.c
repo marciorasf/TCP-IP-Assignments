@@ -3,7 +3,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-
 #include <stdlib.h> // function exit is declared on this lib
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
