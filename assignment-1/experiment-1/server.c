@@ -34,6 +34,7 @@ int main() {
         exit(1);
     }
     listen(s, MAX_PENDING);
+    len = sizeof(sin);
 
     /* wait for connection, then receive and print text */
     while (1) {
