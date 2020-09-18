@@ -4,7 +4,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-
 #include <stdlib.h> // function exit is declared on this lib
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
@@ -27,7 +26,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-
     /* build address data structure */
     bzero((char *)&sin, sizeof(sin));
     
@@ -43,7 +41,6 @@ int main(int argc, char *argv[]) {
         perror("simplex-talk: socket");
         exit(1);
     }
-
     if (connect(s, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
         perror("simplex-talk: connect");
         close(s);
