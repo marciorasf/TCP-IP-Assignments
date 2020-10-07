@@ -66,14 +66,8 @@ def generate_test_b_chart(filename, chart_title):
 
 
 # %% generate charts
-tcp_test_a_filename = "tcp_test_a_rtt_in_ms.csv"
-tcp_test_b_filename = "tcp_test_b_throughput_in_bits_per_second.csv"
+test_a_filename = "test_a_rtt_in_ms.csv"
+test_b_filename = "test_b_throughput_in_bits_per_second.csv"
 
-generate_test_a_chart(tcp_test_a_filename, "Teste A - RTT utilizando socket TCP")
-generate_test_b_chart(tcp_test_b_filename, "Teste B - Vazão utilizando socket TCP")
-
-udp_test_a_filename = "udp_test_a_rtt_in_ms.csv"
-udp_test_b_filename = "udp_test_b_throughput_in_bits_per_second.csv"
-
-generate_test_a_chart(udp_test_a_filename, "Teste A - RTT utilizando socket UDP")
-generate_test_b_chart(udp_test_b_filename, "Teste B - Vazão utilizando socket UDP")
+generate_test_a_chart(test_a_filename, "Teste A - RTT")
+generate_test_b_chart(test_b_filename, "Teste B - Vazão")

@@ -7,10 +7,10 @@
 #include <stdlib.h> // function exit is declared on this lib
 #include <unistd.h> // function close is declared on this lib
 #include <string.h> // function strlen is declared on this lib
-#include <time.h>   //used to calculate tests time
 #include "test.h"
 
 #define SERVER_PORT 54321
+#define MAX_LINE 256
 
 int main(int argc, char *argv[])
 {
@@ -51,10 +51,6 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    /***** Tests *****/
-
-    run_test_a(sock, "tcp_test_a_rtt_in_ms.csv");
-    run_test_b(sock, "tcp_test_b_throughput_in_bits_per_second.csv");
-
-    return 0;
+    run_test_a(sock, "test_a_rtt_in_ms.csv");
+    run_test_b(sock, "test_b_throughput_in_bits_per_second.csv");
 }

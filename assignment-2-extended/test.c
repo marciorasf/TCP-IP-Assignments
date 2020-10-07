@@ -8,7 +8,7 @@
 
 #define MESSAGES_PER_TEST 100000
 #define TESTS_PER_SIZE 3
-#define MESSAGE_MAX_SIZE 32768
+#define MESSAGE_MAX_SIZE_IN_BYTES 32768
 
 /***** FUNCTIONS SIGNATURES *****/
 
@@ -82,13 +82,13 @@ void run_test(
     double rtt_matrix[][TESTS_PER_SIZE],
     double throughput_matrix[][TESTS_PER_SIZE])
 {
-    char buffer[MESSAGE_MAX_SIZE];
+    char buffer[MESSAGE_MAX_SIZE_IN_BYTES];
     int buffer_length;
 
     clock_t begin;
     clock_t end;
 
-    char test_message[MESSAGE_MAX_SIZE];
+    char test_message[MESSAGE_MAX_SIZE_IN_BYTES];
 
     for (int size_index = 0; size_index < n_messages; size_index++)
     {
@@ -104,7 +104,7 @@ void run_test(
                 strcpy(buffer, test_message);
                 buffer_length = strlen(buffer);
                 send(sock, buffer, buffer_length, 0);
-                char recv_buf[MESSAGE_MAX_SIZE];
+                char recv_buf[MESSAGE_MAX_SIZE_IN_BYTES];
                 recv(sock, recv_buf, sizeof(recv_buf), 0);
             }
 
