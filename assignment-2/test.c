@@ -4,11 +4,7 @@
 #include <sys/socket.h>
 #include <string.h>
 
-/***** CONSTANTS *****/
 
-#define MESSAGES_PER_TEST 100000
-#define TESTS_PER_SIZE 3
-#define MESSAGE_MAX_SIZE_IN_BYTES 32768
 
 /***** FUNCTIONS SIGNATURES *****/
 
