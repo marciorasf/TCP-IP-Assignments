@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     */
 
     run_test_a(sock, "tcp_test_a.csv");
+    run_test_b(sock, "tcp_test_b.csv");
 
     return 0;
 }

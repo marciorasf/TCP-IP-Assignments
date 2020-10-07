@@ -4,56 +4,137 @@
 #include <sys/socket.h>
 #include <string.h>
 
-#define N_MESSAGES 100
-#define TESTS_PER_SIZE 3
-#define MESSAGE_MAX_SIZE 1000
+/***** CONSTANTS *****/
 
-void generate_n_bytes_string(int n, char *string);
+#define MESSAGES_PER_TEST 100
+#define TESTS_PER_SIZE 3
+#define MESSAGE_MAX_SIZE 32768
+
+/***** FUNCTIONS SIGNATURES *****/
+
+void run_test_a(int sock, char *filename);
+
+void run_test_b(int sock, char *filename);
+
+// RTT is calculated in ms and throughput in bits/s
+void run_test(
+    int sock,
+    int *message_sizes,
+    int n_messages,
+    double rtt_matrix[][TESTS_PER_SIZE],
+    double throughput_matrix[][TESTS_PER_SIZE]);
+
+void print_result_on_file(
+    char *filename,
+    int *message_sizes,
+    int n_messages,
+    double result_matrix[][TESTS_PER_SIZE]);
+
+void generate_n_bytes_string(int size, char *string);
+
+/***** FUNCTIONS DEFINITION *****/
 
 void run_test_a(int sock, char *filename)
 {
-    char buf[MESSAGE_MAX_SIZE];
-    int len;
+    int message_sizes[] = {2, 10, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
+    int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
 
-    int message_sizes[] = {2, 10, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-    int n_tests = sizeof(message_sizes) / sizeof(message_sizes[0]);
+    double rtt_matrix[n_messages][TESTS_PER_SIZE];
+    double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
-    FILE *file_pointer;
-    file_pointer = fopen(filename, "w");
+    run_test(sock, message_sizes, n_messages, rtt_matrix, throughput_matrix);
+
+    print_result_on_file(filename, message_sizes, n_messages, rtt_matrix);
+
+    return;
+}
+
+void run_test_b(int sock, char *filename)
+{
+    int message_sizes[] = {2, 10, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
+    int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
+
+    double rtt_matrix[n_messages][TESTS_PER_SIZE];
+    double throughput_matrix[n_messages][TESTS_PER_SIZE];
+
+    run_test(sock, message_sizes, n_messages, rtt_matrix, throughput_matrix);
+
+    print_result_on_file(filename, message_sizes, n_messages, throughput_matrix);
+
+    return;
+}
+
+void run_test(
+    int sock,
+    int *message_sizes,
+    int n_messages,
+    double rtt_matrix[][TESTS_PER_SIZE],
+    double throughput_matrix[][TESTS_PER_SIZE])
+{
+    char buffer[MESSAGE_MAX_SIZE];
+    int buffer_length;
 
     clock_t begin;
     clock_t end;
 
     char test_message[MESSAGE_MAX_SIZE];
 
-    for (int size_index = 0; size_index < n_tests; size_index++)
+    for (int size_index = 0; size_index < n_messages; size_index++)
     {
         int size = message_sizes[size_index];
-        fprintf(file_pointer, "%d,", size);
         generate_n_bytes_string(size, test_message);
 
-        for (int i = 0; i < TESTS_PER_SIZE; i++)
+        for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++)
         {
             begin = clock();
 
-            for (int counter = 0; counter < N_MESSAGES; counter++)
+            for (int counter = 0; counter < MESSAGES_PER_TEST; counter++)
             {
-                strcpy(buf, test_message);
-                len = strlen(buf);
-                send(sock, buf, len, 0);
+                strcpy(buffer, test_message);
+                buffer_length = strlen(buffer);
+                send(sock, buffer, buffer_length, 0);
                 char recv_buf[MESSAGE_MAX_SIZE];
                 recv(sock, recv_buf, sizeof(recv_buf), 0);
             }
 
             end = clock();
-            float rtt = (float)(end - begin) / (TESTS_PER_SIZE);
-            fprintf(file_pointer, "%.1f,", rtt);
+            double total_time_in_seconds = (double)(end - begin) / CLOCKS_PER_SEC;
+
+            double rtt = total_time_in_seconds * 1000 / MESSAGES_PER_TEST;
+            rtt_matrix[size_index][test_index] = rtt;
+
+            double throughput = size * 8 / total_time_in_seconds;
+            throughput_matrix[size_index][test_index] = throughput;
+        }
+    }
+
+    return;
+}
+
+void print_result_on_file(
+    char *filename,
+    int *message_sizes,
+    int n_messages,
+    double result_matrix[][TESTS_PER_SIZE])
+{
+    FILE *file_pointer;
+    file_pointer = fopen(filename, "w");
+
+    for (int size_index = 0; size_index < n_messages; size_index++)
+    {
+        fprintf(file_pointer, "%d", message_sizes[size_index]);
+
+        for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++)
+        {
+            fprintf(file_pointer, ",%f", result_matrix[size_index][test_index]);
         }
 
         fprintf(file_pointer, "\n");
     }
 
     fclose(file_pointer);
+
+    return;
 }
 
 void generate_n_bytes_string(int n, char *string)
