@@ -51,12 +51,10 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    /*----------------------------------------------------------------
-    * Tests
-    */
+    /***** Tests *****/
 
-    run_test_a(sock, "tcp_test_a.csv");
-    run_test_b(sock, "tcp_test_b.csv");
+    run_test_a(sock, "tcp_test_a_rtt_in_ms.csv");
+    run_test_b(sock, "tcp_test_b_throughput_bits_second.csv");
 
     return 0;
 }
