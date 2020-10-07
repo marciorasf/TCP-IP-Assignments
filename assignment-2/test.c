@@ -32,6 +32,12 @@ void print_result_on_file(
 
 void generate_n_bytes_string(int size, char *string);
 
+double convert_seconds_to_ms(double n);
+
+int convert_bytes_to_bits(int n);
+
+int convert_kbytes_to_bytes(int n);
+
 /***** FUNCTIONS DEFINITION *****/
 
 void run_test_a(int sock, char *filename)
@@ -100,10 +106,10 @@ void run_test(
             end = clock();
             double total_time_in_seconds = (double)(end - begin) / CLOCKS_PER_SEC;
 
-            double rtt = total_time_in_seconds * 1000 / MESSAGES_PER_TEST;
+            double rtt = convert_seconds_to_ms(total_time_in_seconds) / MESSAGES_PER_TEST;
             rtt_matrix[size_index][test_index] = rtt;
 
-            double throughput = size * 8 / total_time_in_seconds;
+            double throughput = convert_bytes_to_bits(size) / total_time_in_seconds;
             throughput_matrix[size_index][test_index] = throughput;
         }
     }
@@ -148,4 +154,19 @@ void generate_n_bytes_string(int n, char *string)
     // End char must be null
     string[n - 1] = '\0';
     return;
+}
+
+double convert_seconds_to_ms(double n)
+{
+    return n * 1000;
+}
+
+int convert_bytes_to_bits(int n)
+{
+    return n * 8;
+}
+
+int convert_kbytes_to_bytes(int n)
+{
+    return n * 1024;
 }
