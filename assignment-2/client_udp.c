@@ -54,5 +54,5 @@ int main(int argc, char *argv[])
     }
 
     run_test_a(sock, "udp_test_a_rtt_in_ms.csv");
-    run_test_b(sock, "udp_test_b_throughput_in_bits_second.csv");
+    run_test_b(sock, "udp_test_b_throughput_in_bits_per_second.csv");
 }
