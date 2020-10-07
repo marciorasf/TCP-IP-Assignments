@@ -5,13 +5,14 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
+import os
 
 # %% declare params and functions
 simulation_labels = ["sim_1", "sim_2", "sim_3"]
 df_labels = ["size"] + simulation_labels
 
 
-def generate_test_a_chart(filename, chart_title):
+def generate_test_a_chart(filename, chart_title, output_filename):
     x_nticks = 40
     y_nticks = 25
 
@@ -34,10 +35,11 @@ def generate_test_a_chart(filename, chart_title):
             "nticks": y_nticks
         }
     )
-    chart.show()
+
+    chart.write_image(f'images/{output_filename}')
 
 
-def generate_test_b_chart(filename, chart_title):
+def generate_test_b_chart(filename, chart_title, output_filename):
     x_nticks = 40
     y_nticks = 25
 
@@ -62,12 +64,20 @@ def generate_test_b_chart(filename, chart_title):
             "nticks": y_nticks
         }
     )
-    chart.show()
+
+    chart.write_image(f'images/{output_filename}')
+
+
+def create_images_folder():
+    if not os.path.exists("images"):
+        os.mkdir("images")
 
 
 # %% generate charts
 test_a_filename = "test_a_rtt_in_ms.csv"
 test_b_filename = "test_b_throughput_in_bits_per_second.csv"
 
-generate_test_a_chart(test_a_filename, "Teste A - RTT")
-generate_test_b_chart(test_b_filename, "Teste B - Vazão")
+
+create_images_folder()
+generate_test_a_chart(test_a_filename, "Teste A - RTT", "test_a.png")
+generate_test_b_chart(test_b_filename, "Teste B - Vazão", "test_b.png")
