@@ -6,7 +6,7 @@
 
 /***** CONSTANTS *****/
 
-#define MESSAGES_PER_TEST 100
+#define MESSAGES_PER_TEST 100000
 #define TESTS_PER_SIZE 3
 #define MESSAGE_MAX_SIZE 32768
 
@@ -57,8 +57,13 @@ void run_test_a(int sock, char *filename)
 
 void run_test_b(int sock, char *filename)
 {
-    int message_sizes[] = {2, 10, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-    int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
+    int n_messages = 32;
+    int message_sizes[n_messages];
+
+    for (int i = 0; i < n_messages; i++)
+    {
+        message_sizes[i] = convert_kbytes_to_bytes(i + 1);
+    }
 
     double rtt_matrix[n_messages][TESTS_PER_SIZE];
     double throughput_matrix[n_messages][TESTS_PER_SIZE];
