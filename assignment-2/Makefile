@@ -12,9 +12,12 @@ client_udp:
 server_udp:
 	g++ -Wall server_udp.c -o server_udp.out
 
-generate_tests:
-	make 
+run_tcp_tests:
+	make
 	gnome-terminal -x sh -c "./server_tcp.out"
 	gnome-terminal -x sh -c "./client_tcp.out ''"
+
+run_udp_tests:
+	make
 	gnome-terminal -x sh -c "./server_udp.out"
 	gnome-terminal -x sh -c "./client_udp.out ''"
