@@ -17,17 +17,20 @@ int main(int argc, char *argv[]) {
   char *host;
   struct sockaddr_in server_addr;
 
+  // Get host from program input
   if (argc == 2) {
     host = argv[1];
   } else {
-    fprintf(stderr, "usage: simplex-talk host\n");
+    fprintf(stderr, "host not provided\n");
     exit(1);
   }
 
+  // Fill server_addr fields
   server_addr.sin_family = AF_INET;
   inet_aton(host, &server_addr.sin_addr);
   server_addr.sin_port = htons(SERVER_PORT);
 
+  // Create UDP socket file descriptor
   if ((sock = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("error on socket");
     exit(1);
@@ -35,6 +38,11 @@ int main(int argc, char *argv[]) {
 
   char buf[MESSAGE_MAX_SIZE];
   unsigned int len, n;
+
+  /*
+  * The code below is used to manual tests
+  * To use it, uncomment it and comment the 2 run_test calls
+  */ 
 
   // while (fgets(buf, sizeof(buf), stdin)) {
   //   sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr,
@@ -46,6 +54,8 @@ int main(int argc, char *argv[]) {
   //   fputs(buf, stdout);
   // }
 
+  // Run automated tests
+  // These functions run the book's tests and save results on csv files
   run_test_a(sock, &server_addr, "test_a_rtt_in_ms.csv");
   run_test_b(sock, &server_addr, "test_b_throughput_in_bits_per_second.csv");
 }
