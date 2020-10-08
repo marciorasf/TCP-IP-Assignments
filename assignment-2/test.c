@@ -1,5 +1,6 @@
 #include "test.h"
 
+#include <netinet/in.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -7,13 +8,9 @@
 
 /***** FUNCTIONS SIGNATURES *****/
 
-void run_test_a(int sock, char *filename);
-
-void run_test_b(int sock, char *filename);
-
 // RTT is calculated in ms and throughput in bits/s
-void run_test(int sock, int *message_sizes, int n_messages,
-              double rtt_matrix[][TESTS_PER_SIZE],
+void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
+              int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]);
 
 void print_result_on_file(char *filename, int *message_sizes, int n_messages,
@@ -29,7 +26,7 @@ int convert_kbytes_to_bytes(int n);
 
 /***** FUNCTIONS DEFINITION *****/
 
-void run_test_a(int sock, char *filename) {
+void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
   int message_sizes[] = {2,   10,  50,  100, 200, 300, 400,
                          500, 600, 700, 800, 900, 1000};
   int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
@@ -37,14 +34,15 @@ void run_test_a(int sock, char *filename) {
   double rtt_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
-  run_test(sock, message_sizes, n_messages, rtt_matrix, throughput_matrix);
+  run_test(sock, server_addr, message_sizes, n_messages, rtt_matrix,
+           throughput_matrix);
 
   print_result_on_file(filename, message_sizes, n_messages, rtt_matrix);
 
   return;
 }
 
-void run_test_b(int sock, char *filename) {
+void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
   int n_messages = 32;
   int message_sizes[n_messages];
 
@@ -55,37 +53,42 @@ void run_test_b(int sock, char *filename) {
   double rtt_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
-  run_test(sock, message_sizes, n_messages, rtt_matrix, throughput_matrix);
+  run_test(sock, server_addr, message_sizes, n_messages, rtt_matrix,
+           throughput_matrix);
 
   print_result_on_file(filename, message_sizes, n_messages, throughput_matrix);
 
   return;
 }
 
-void run_test(int sock, int *message_sizes, int n_messages,
-              double rtt_matrix[][TESTS_PER_SIZE],
+void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
+              int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]) {
-  char buffer[MESSAGE_MAX_SIZE_IN_BYTES];
-  int buffer_length;
+  char buffer[MESSAGE_MAX_SIZE];
 
   clock_t begin;
   clock_t end;
 
-  char test_message[MESSAGE_MAX_SIZE_IN_BYTES];
+  char message[MESSAGE_MAX_SIZE];
+  int size, message_length;
+  unsigned int len;
 
   for (int size_index = 0; size_index < n_messages; size_index++) {
-    int size = message_sizes[size_index];
-    generate_n_bytes_string(size, test_message);
+    size = message_sizes[size_index];
+    generate_n_bytes_string(size, message);
+    message_length = strlen(message);
 
     for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++) {
       begin = clock();
 
       for (int counter = 0; counter < MESSAGES_PER_TEST; counter++) {
-        strcpy(buffer, test_message);
-        buffer_length = strlen(buffer);
-        send(sock, buffer, buffer_length, 0);
-        char recv_buf[MESSAGE_MAX_SIZE_IN_BYTES];
-        recv(sock, recv_buf, sizeof(recv_buf), 0);
+        sendto(sock, message, message_length, 0, (struct sockaddr *)server_addr,
+               sizeof(*server_addr));
+
+        char buffer[MESSAGE_MAX_SIZE];
+
+        recvfrom(sock, buffer, sizeof(buffer), 0,
+                 (struct sockaddr *)server_addr, &len);
       }
 
       end = clock();

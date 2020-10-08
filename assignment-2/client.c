@@ -36,14 +36,14 @@ int main(int argc, char *argv[]) {
   char buf[MESSAGE_MAX_SIZE];
   unsigned int len, n;
 
-  while (fgets(buf, sizeof(buf), stdin)) {
-    sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+  // while (fgets(buf, sizeof(buf), stdin)) {
+  //   sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
 
-    recvfrom(sock, buf, strlen(buf), 0, (struct sockaddr *)&server_addr, &len);
+  //   recvfrom(sock, buf, strlen(buf), 0, (struct sockaddr *)&server_addr, &len);
 
-    fputs(buf, stdout);
-  }
+  //   fputs(buf, stdout);
+  // }
 
-  // run_test_a(sock, &server_addr, "test_a_rtt_in_ms.csv");
-  // run_test_b(sock, &server_addr, "test_b_throughput_in_bits_per_second.csv");
+  run_test_a(sock, &server_addr, "test_a_rtt_in_ms.csv");
+  run_test_b(sock, &server_addr, "test_b_throughput_in_bits_per_second.csv");
 }
