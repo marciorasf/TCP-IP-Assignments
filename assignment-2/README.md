@@ -6,7 +6,7 @@ Os seguintes parâmetros de testes estão definidos no arquivo **test.h**:
 
 ```TESTS_PER_SIZE```: determina quantos vezes o teste será executado para cada tamanho de mensagem.
 
-```MESSAGES_PER_SIZE```: determina quantas mensagens serão enviadas a cada teste.
+```MESSAGES_PER_SIZE```: determina quantas mensagens serão enviadas a cada teste. Esse parâmetro é muito útil para quando se quer que os resultados sejam gerados rapidamente.
 
 <br>
 
