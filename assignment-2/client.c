@@ -11,12 +11,11 @@
 #include "test.h"
 
 #define SERVER_PORT 54321
-#define MAX_LINE 256
 
 int main(int argc, char *argv[]) {
-  struct sockaddr_in sin;
-  char *host;
   int sock;
+  char *host;
+  struct sockaddr_in server_addr;
 
   if (argc == 2) {
     host = argv[1];
@@ -25,27 +24,27 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  /* build address data structure */
-  bzero((char *)&sin, sizeof(sin));
+  server_addr.sin_family = AF_INET;
+  inet_aton(host, &server_addr.sin_addr);
+  server_addr.sin_port = htons(SERVER_PORT);
 
-  sin.sin_family = AF_INET;
-
-  /* parse dotted IP to in_addr_t format and assign to sin.sin_addr */
-  inet_aton(host, &sin.sin_addr);
-
-  sin.sin_port = htons(SERVER_PORT);
-
-  /* active open */
-  if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+  if ((sock = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("simplex-talk: socket");
     exit(1);
   }
-  if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
-    perror("simplex-talk: connect");
-    close(sock);
-    exit(1);
+
+  char buf[MESSAGE_MAX_SIZE];
+  unsigned int len, n;
+  socklen_t from_len;
+
+  while (fgets(buf, sizeof(buf), stdin)) {
+    sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+
+    n = recvfrom(sock, buf, strlen(buf), 0, (struct sockaddr *)&server_addr, &len);
+
+    fputs(buf, stdout);
   }
 
-  run_test_a(sock, "test_a_rtt_in_ms.csv");
-  run_test_b(sock, "test_b_throughput_in_bits_per_second.csv");
+  // run_test_a(sock, "test_a_rtt_in_ms.csv");
+  // run_test_b(sock, "test_b_throughput_in_bits_per_second.csv");
 }

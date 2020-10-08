@@ -6,45 +6,43 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>  // function close is declared on this lib
+#include "test.h"
 
 #define SERVER_PORT 54321
-#define MAX_PENDING 5
-#define MAX_LINE 256
 
 int main() {
-  struct sockaddr_in sin;
-  char buf[MAX_LINE];
-  unsigned int len;
-  int s, new_s;
+  struct sockaddr_in server_addr, client_addr;
+  int sock;
 
-  /* build address data structure */
-  bzero((char *)&sin, sizeof(sin));
-  sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = INADDR_ANY;
-  sin.sin_port = htons(SERVER_PORT);
+  bzero((char *)&server_addr, sizeof(server_addr));
+  bzero((char *)&client_addr, sizeof(client_addr));
 
-  /* setup passive open */
-  if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_addr.s_addr = INADDR_ANY;
+  server_addr.sin_port = htons(SERVER_PORT);
+
+  if ((sock = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("simplex-talk: socket");
     exit(1);
   }
-  if ((bind(s, (struct sockaddr *)&sin, sizeof(sin))) < 0) {
+
+  if ((bind(sock, (struct sockaddr *)&server_addr, sizeof(server_addr))) < 0) {
     perror("simplex-talk: bind");
     exit(1);
   }
-  listen(s, MAX_PENDING);
 
-  /* wait for connection, then receive and print text */
+  unsigned int len, n;
+  char buf[MESSAGE_MAX_SIZE];
+
+  len = sizeof(client_addr);
+
   while (1) {
-    if ((new_s = accept(s, (struct sockaddr *)&sin, &len)) < 0) {
-      perror("simplex-talk: accept");
-      exit(1);
+    while ((n = recvfrom(sock, buf, sizeof(buf), 0,
+                         (struct sockaddr *)&client_addr, &len))) {
+      fputs(buf, stdout);
+      sendto(sock, buf, strlen(buf), 0, (const struct sockaddr *)&client_addr,
+             len);
     }
-
-    while ((len = recv(new_s, buf, sizeof(buf), 0))) {
-      // Resend to client the message
-      send(new_s, buf, len, 0);
-    }
-    close(new_s);
+      close(sock);
   }
 }
