@@ -17,8 +17,8 @@ void print_result_on_file(char *filename, int *message_sizes, int n_messages,
                           double result_matrix[][TESTS_PER_SIZE]);
 
 /*
-* The functions below are just auxiliary, and the name describes what they do
-*/
+ * The functions below are just auxiliary, and the name describes what they do
+ */
 void generate_n_bytes_string(int size, char *string);
 
 double convert_seconds_to_ms(double n);
@@ -32,11 +32,12 @@ void print_result_on_file(char *filename, int *message_sizes, int n_messages,
 
 /********** FUNCTIONS DEFINITIONS **********/
 void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
-  // Messages used on the test
+  // Define messages to use on test
   int message_sizes[] = {2,   10,  50,  100, 200, 300, 400,
                          500, 600, 700, 800, 900, 1000};
   int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
 
+  // Declare matrices to store results 
   double rtt_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
@@ -52,11 +53,12 @@ void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
   int n_messages = 32;
   int message_sizes[n_messages];
 
-  // Generate messages used on test
+  // Generate messages to use on test
   for (int i = 0; i < n_messages; i++) {
     message_sizes[i] = convert_kbytes_to_bytes(i + 1);
   }
 
+  // Declare matrices to store results 
   double rtt_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
@@ -76,31 +78,39 @@ void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
   clock_t begin;
   clock_t end;
 
-  char message[MESSAGE_MAX_SIZE];
-  int size, message_length;
+  int size;
   unsigned int len;
+  char message[MESSAGE_MAX_SIZE];
+  char buffer[MESSAGE_MAX_SIZE];
 
+  // Run tests for every message size
   for (int size_index = 0; size_index < n_messages; size_index++) {
     size = message_sizes[size_index];
     generate_n_bytes_string(size, message);
-    message_length = strlen(message);
 
+
+    // Run the test TEST_PER_SIZE times
     for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++) {
+      // Get the the start time
       begin = clock();
 
+      // Send MESSAGES_PER_TEST messages, always waiting for the server answer,
+      // before sending another message
       for (int counter = 0; counter < MESSAGES_PER_TEST; counter++) {
-        sendto(sock, message, message_length, 0, (struct sockaddr *)server_addr,
+        sendto(sock, message, size, 0, (struct sockaddr *)server_addr,
                sizeof(*server_addr));
-
-        char buffer[MESSAGE_MAX_SIZE];
 
         recvfrom(sock, buffer, sizeof(buffer), 0,
                  (struct sockaddr *)server_addr, &len);
       }
 
+      // Get the end time
       end = clock();
+
+      // The time is got in clocks, so is necessary to convert to seconds
       double total_time_in_seconds = (double)(end - begin) / CLOCKS_PER_SEC;
 
+      // Calculate the metrics and save on the matrix
       double rtt =
           convert_seconds_to_ms(total_time_in_seconds) / MESSAGES_PER_TEST;
       rtt_matrix[size_index][test_index] = rtt;
@@ -109,26 +119,6 @@ void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
       throughput_matrix[size_index][test_index] = throughput;
     }
   }
-
-  return;
-}
-
-void print_result_on_file(char *filename, int *message_sizes, int n_messages,
-                          double result_matrix[][TESTS_PER_SIZE]) {
-  FILE *file_pointer;
-  file_pointer = fopen(filename, "w");
-
-  for (int size_index = 0; size_index < n_messages; size_index++) {
-    fprintf(file_pointer, "%d", message_sizes[size_index]);
-
-    for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++) {
-      fprintf(file_pointer, ",%f", result_matrix[size_index][test_index]);
-    }
-
-    fprintf(file_pointer, "\n");
-  }
-
-  fclose(file_pointer);
 
   return;
 }
@@ -149,3 +139,23 @@ double convert_seconds_to_ms(double n) { return n * 1000; }
 int convert_bytes_to_bits(int n) { return n * 8; }
 
 int convert_kbytes_to_bytes(int n) { return n * 1024; }
+
+void print_result_on_file(char *filename, int *message_sizes, int n_messages,
+                          double result_matrix[][TESTS_PER_SIZE]) {
+  FILE *file_pointer;
+  file_pointer = fopen(filename, "w");
+
+  for (int size_index = 0; size_index < n_messages; size_index++) {
+    fprintf(file_pointer, "%d", message_sizes[size_index]);
+
+    for (int test_index = 0; test_index < TESTS_PER_SIZE; test_index++) {
+      fprintf(file_pointer, ",%f", result_matrix[size_index][test_index]);
+    }
+
+    fprintf(file_pointer, "\n");
+  }
+
+  fclose(file_pointer);
+
+  return;
+}
