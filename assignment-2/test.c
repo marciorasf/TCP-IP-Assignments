@@ -8,6 +8,7 @@
 
 /********** FUNCTIONS SIGNATURES **********/
 // RTT is calculated in ms and throughput in bits/s
+
 void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
               int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]);
@@ -15,6 +16,9 @@ void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
 void print_result_on_file(char *filename, int *message_sizes, int n_messages,
                           double result_matrix[][TESTS_PER_SIZE]);
 
+/*
+* The functions below are just auxiliary, and the name describes what they do
+*/
 void generate_n_bytes_string(int size, char *string);
 
 double convert_seconds_to_ms(double n);
@@ -23,8 +27,12 @@ int convert_bytes_to_bits(int n);
 
 int convert_kbytes_to_bytes(int n);
 
+void print_result_on_file(char *filename, int *message_sizes, int n_messages,
+                          double result_matrix[][TESTS_PER_SIZE]);
+
 /********** FUNCTIONS DEFINITIONS **********/
 void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
+  // Messages used on the test
   int message_sizes[] = {2,   10,  50,  100, 200, 300, 400,
                          500, 600, 700, 800, 900, 1000};
   int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
@@ -44,6 +52,7 @@ void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
   int n_messages = 32;
   int message_sizes[n_messages];
 
+  // Generate messages used on test
   for (int i = 0; i < n_messages; i++) {
     message_sizes[i] = convert_kbytes_to_bytes(i + 1);
   }
