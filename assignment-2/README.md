@@ -8,6 +8,10 @@ Os seguintes parâmetros de testes estão definidos no arquivo **test.h**:
 
 ```MESSAGES_PER_SIZE```: determina quantas mensagens serão enviadas a cada teste. Esse parâmetro é muito útil para quando se quer que os resultados sejam gerados rapidamente.
 
+Para alterar o IP do servidor utilizado pelo cliente, basta colocar o IP dentro das aspas na última linha do **makefile**
+
+
+
 <br>
 
 Para rodar os testes, execute:
