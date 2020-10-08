@@ -73,7 +73,6 @@ void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
 void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
               int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]) {
-  char buffer[MESSAGE_MAX_SIZE];
 
   clock_t begin;
   clock_t end;
