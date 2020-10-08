@@ -6,8 +6,7 @@
 #include <sys/socket.h>
 #include <time.h>
 
-/***** FUNCTIONS SIGNATURES *****/
-
+/********** FUNCTIONS SIGNATURES **********/
 // RTT is calculated in ms and throughput in bits/s
 void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
               int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
@@ -24,8 +23,7 @@ int convert_bytes_to_bits(int n);
 
 int convert_kbytes_to_bytes(int n);
 
-/***** FUNCTIONS DEFINITION *****/
-
+/********** FUNCTIONS DEFINITIONS **********/
 void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
   int message_sizes[] = {2,   10,  50,  100, 200, 300, 400,
                          500, 600, 700, 800, 900, 1000};

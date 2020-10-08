@@ -1,11 +1,11 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
-#include <stdlib.h>  // function exit is declared on this lib
-#include <string.h>  // function strlen is declared on this lib
+#include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <unistd.h>  // function close is declared on this lib
+#include <unistd.h>
 
 #include "test.h"
 
@@ -27,7 +27,8 @@ int main() {
     exit(1);
   }
 
-  if ((bind(sock_file_descriptor, (struct sockaddr *)&server_addr, sizeof(server_addr))) < 0) {
+  if ((bind(sock_file_descriptor, (struct sockaddr *)&server_addr,
+            sizeof(server_addr))) < 0) {
     perror("error on bind");
     exit(1);
   }
@@ -40,9 +41,8 @@ int main() {
   while (1) {
     while ((n = recvfrom(sock_file_descriptor, buf, sizeof(buf), 0,
                          (struct sockaddr *)&client_addr, &len))) {
-
-      sendto(sock_file_descriptor, buf, strlen(buf), 0, (const struct sockaddr *)&client_addr,
-             len);
+      sendto(sock_file_descriptor, buf, strlen(buf), 0,
+             (const struct sockaddr *)&client_addr, len);
     }
     close(sock_file_descriptor);
   }

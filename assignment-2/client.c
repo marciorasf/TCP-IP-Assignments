@@ -2,11 +2,11 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
-#include <stdlib.h>  // function exit is declared on this lib
-#include <string.h>  // function strlen is declared on this lib
+#include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <unistd.h>  // function close is declared on this lib
+#include <unistd.h>
 
 #include "test.h"
 
@@ -37,9 +37,11 @@ int main(int argc, char *argv[]) {
   unsigned int len, n;
 
   // while (fgets(buf, sizeof(buf), stdin)) {
-  //   sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+  //   sendto(sock, buf, sizeof(buf), 0, (struct sockaddr *)&server_addr,
+  //   sizeof(server_addr));
 
-  //   recvfrom(sock, buf, strlen(buf), 0, (struct sockaddr *)&server_addr, &len);
+  //   recvfrom(sock, buf, strlen(buf), 0, (struct sockaddr *)&server_addr,
+  //   &len);
 
   //   fputs(buf, stdout);
   // }
