@@ -14,7 +14,9 @@ Para rodar os testes, execute:
 ```sh
 make run_tests
 ```
-Será feita a build dos códigos necessários. Após isso os testes serão executados. Os resultados ficarão disponíveis em arquivos CSV na raiz dessa pasta.
+Será feita a build dos códigos necessários. Após isso os testes serão executados. Dois terminais serão abertos, ao terminar, o terminal do cliente fechará automaticamente, mas o do servidor não. Então, uma indicação de que o teste terminou é quando um dos terminais fecha.
+
+Os resultados ficarão disponíveis em arquivos CSV na raiz dessa pasta.
 
 <br>
 
