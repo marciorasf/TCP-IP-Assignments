@@ -1,5 +1,7 @@
 # Atividade Prática 2
 
+Essa atividade consiste em fazer as letras **a** e **b** da questão 48 utilizando apenas o protocolo UDP, do livro Redes de Computadores: Uma Abordagem de Sistemas, Quinta Edição.
+
 ## Testes
 
 Os seguintes parâmetros de testes estão definidos no arquivo **test.h**:
