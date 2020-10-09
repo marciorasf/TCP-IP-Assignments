@@ -10,3 +10,6 @@ run_tests:
 	make
 	gnome-terminal -x sh -c "./server.out"
 	gnome-terminal -x sh -c "./client.out ''"
+
+clean:
+	rm -rf -f images *.csv *.out
