@@ -2,7 +2,6 @@
 
 # %% imports
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
 import os
@@ -65,7 +64,7 @@ def generate_test_b_chart(filename, chart_title, output_filename):
         }
     )
 
-    chart.write_image(f'images/{output_filename}')
+    chart.write_image('images/{}'.format(output_filename))
 
 
 def create_images_folder():

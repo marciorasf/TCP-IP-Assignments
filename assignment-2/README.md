@@ -12,8 +12,6 @@ Os seguintes parâmetros de testes estão definidos no arquivo **test.h**:
 
 Para alterar o IP do servidor utilizado pelo cliente, basta colocar o IP dentro das aspas na última linha do **makefile**
 
-
-
 <br>
 
 Para rodar os testes, execute:
