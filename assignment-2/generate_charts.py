@@ -35,7 +35,7 @@ def generate_test_a_chart(filename, chart_title, output_filename):
         }
     )
 
-    chart.write_image(f'images/{output_filename}')
+    save_chart_on_file(chart, output_filename)
 
 
 def generate_test_b_chart(filename, chart_title, output_filename):
@@ -64,13 +64,18 @@ def generate_test_b_chart(filename, chart_title, output_filename):
         }
     )
 
-    chart.write_image('images/{}'.format(output_filename))
+    save_chart_on_file(chart, output_filename)
 
 
 def create_images_folder():
     if not os.path.exists("images"):
         os.mkdir("images")
 
+def save_chart_on_file(chart, output_filename):
+    try:
+        chart.write_image('images/{}'.format(output_filename))
+    except:
+        chart.show()
 
 # %% generate charts
 test_a_filename = "test_a_rtt_in_ms.csv"
