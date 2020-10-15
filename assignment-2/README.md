@@ -14,11 +14,11 @@ Para alterar o IP do servidor utilizado pelo cliente, basta colocar o IP dentro 
 
 <br>
 
-Para rodar os testes, execute:
+Para rodar os testes localmente, execute:
 ```sh
-make run_tests
+make run_local_tests
 ```
-Será feita a build dos códigos necessários. Após isso os testes serão executados. Dois terminais serão abertos, ao terminar, o terminal do cliente fechará automaticamente, mas o do servidor não. Então, uma indicação de que o teste terminou é quando um dos terminais fecha.
+Será feita a build dos códigos necessários. Após isso os testes serão executados. Dois terminais serão abertos, o terminal do cliente mostrará o progresso dos testes. Ao terminar, o terminal do cliente fechará automaticamente, mas o do servidor não. Então, uma indicação de que o teste terminou é quando um dos terminais fecha.
 
 Os resultados ficarão disponíveis em arquivos CSV na raiz dessa pasta.
 

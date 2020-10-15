@@ -33,8 +33,8 @@ void print_result_on_file(char *filename, int *message_sizes, int n_messages,
 /********** FUNCTIONS DEFINITIONS **********/
 void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
   // Define messages to use on test
-  int message_sizes[] = {2,   10,  50,  100, 200, 300, 400,
-                         500, 600, 700, 800, 900, 1000};
+  int message_sizes[] = {2,   10, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450,
+                         500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000};
   int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
 
   // Declare matrices to store results 
@@ -117,7 +117,11 @@ void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
       double throughput = convert_bytes_to_bits(size) / total_time_in_seconds;
       throughput_matrix[size_index][test_index] = throughput;
     }
+
+    printf("Finished test for message of size = %d\n", size);
   }
+
+  printf("\n ---------------------------------------------------------\n");
 
   return;
 }
