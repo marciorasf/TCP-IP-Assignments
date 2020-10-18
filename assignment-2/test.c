@@ -10,7 +10,7 @@
 // RTT is calculated in ms and throughput in bits/s
 
 void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
-              int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
+              int n_messages, double latency_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]);
 
 void print_result_on_file(char *filename, int *message_sizes, int n_messages,
@@ -33,18 +33,18 @@ void print_result_on_file(char *filename, int *message_sizes, int n_messages,
 /********** FUNCTIONS DEFINITIONS **********/
 void run_test_a(int sock, struct sockaddr_in *server_addr, char *filename) {
   // Define messages to use on test
-  int message_sizes[] = {2,   10, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450,
+  int message_sizes[] = {2, 10, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450,
                          500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000};
   int n_messages = sizeof(message_sizes) / sizeof(message_sizes[0]);
 
   // Declare matrices to store results 
-  double rtt_matrix[n_messages][TESTS_PER_SIZE];
+  double latency_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
-  run_test(sock, server_addr, message_sizes, n_messages, rtt_matrix,
+  run_test(sock, server_addr, message_sizes, n_messages, latency_matrix,
            throughput_matrix);
 
-  print_result_on_file(filename, message_sizes, n_messages, rtt_matrix);
+  print_result_on_file(filename, message_sizes, n_messages, latency_matrix);
 
   return;
 }
@@ -59,10 +59,10 @@ void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
   }
 
   // Declare matrices to store results 
-  double rtt_matrix[n_messages][TESTS_PER_SIZE];
+  double latency_matrix[n_messages][TESTS_PER_SIZE];
   double throughput_matrix[n_messages][TESTS_PER_SIZE];
 
-  run_test(sock, server_addr, message_sizes, n_messages, rtt_matrix,
+  run_test(sock, server_addr, message_sizes, n_messages, latency_matrix,
            throughput_matrix);
 
   print_result_on_file(filename, message_sizes, n_messages, throughput_matrix);
@@ -71,7 +71,7 @@ void run_test_b(int sock, struct sockaddr_in *server_addr, char *filename) {
 }
 
 void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
-              int n_messages, double rtt_matrix[][TESTS_PER_SIZE],
+              int n_messages, double latency_matrix[][TESTS_PER_SIZE],
               double throughput_matrix[][TESTS_PER_SIZE]) {
 
   clock_t begin;
@@ -112,7 +112,7 @@ void run_test(int sock, struct sockaddr_in *server_addr, int *message_sizes,
       // Calculate the metrics and save on the matrix
       double rtt =
           convert_seconds_to_ms(total_time_in_seconds) / MESSAGES_PER_TEST;
-      rtt_matrix[size_index][test_index] = rtt;
+      latency_matrix[size_index][test_index] = rtt;
 
       double throughput = convert_bytes_to_bits(size) / total_time_in_seconds;
       throughput_matrix[size_index][test_index] = throughput;

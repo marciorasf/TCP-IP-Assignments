@@ -51,7 +51,7 @@ int main() {
      */
     while ((n = recvfrom(sock, buf, sizeof(buf), 0,
                          (struct sockaddr *)&client_addr, &len))) {
-      // Send the same message received to the client
+      // Send the received message to the client
       sendto(sock, buf, strlen(buf), 0, (const struct sockaddr *)&client_addr,
              len);
     }

@@ -30,7 +30,7 @@ def generate_test_a_chart(filename, chart_title, output_filename):
             "nticks": x_nticks
         },
         yaxis={
-            "title": "RTT [ms]",
+            "title": "Latência [ms]",
             "nticks": y_nticks
         }
     )
@@ -59,7 +59,7 @@ def generate_test_b_chart(filename, chart_title, output_filename):
             "nticks": x_nticks
         },
         yaxis={
-            "title": "Vazão [b/s]",
+            "title": "Vazão [bps]",
             "nticks": y_nticks
         }
     )
