@@ -1,2 +1,2 @@
 # TCP-IP-Assignments
-Repository for the code assignments of the discipline TCP/IP
+Repository for the Electronic Engineering Department(DELT)-UFMG TCP/IP  discipline's code assignments.
